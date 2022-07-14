@@ -1,0 +1,75 @@
+[tool.poetry]
+name = "django-mongoengine-rql"
+version = "0.1.0"
+description = "Django Mongoengine RQL Filtering"
+authors = ["CloudBlue LLC"]
+license = "Apache-2.0"
+packages = [
+    { include = "dj_mongoengine_rql" }
+]
+readme = "./README.md"
+homepage = "https://connect.cloudblue.com/community/api/rql/"
+repository = "https://github.com/cloudblue/django-mongoengine-rql"
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: Unix",
+    "Framework :: Django :: 3.0",
+    "Framework :: Django :: 3.1",
+    "Framework :: Django :: 3.2",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Text Processing :: Filters"
+]
+keywords = [
+    "rql",
+    "filter",
+    "django",
+    "mongo",
+    "mongoengine"
+]
+
+
+[tool.poetry.dependencies]
+python = "^3.8"
+django-rql = "^4.2.0"
+django-mongoengine = "^0.5.4"
+
+[tool.poetry.dev-dependencies]
+mongomock = "^4.1"
+ipython = ">=7.10.0"
+pytest = "^6.1.2"
+pytest-cov = "^2.10.1"
+pytest-mock = "^3.3.1"
+coverage = {extras = ["toml"], version = "^5.3"}
+flake8 = "~3.8"
+flake8-bugbear = "~20"
+flake8-cognitive-complexity = "^0.1"
+flake8-commas = "~2.0"
+flake8-future-import = "~0.4"
+flake8-import-order = "~0.18"
+flake8-broken-line = "~0.3"
+Sphinx = "^4.4.0"
+sphinx-rtd-theme = "^1.0.0"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = "tests"
+log_cli = true
+addopts = "--show-capture=no --junitxml=tests/reports/out.xml --cov=dj_mongoengine_rql --cov-report xml:tests/reports/coverage.xml  --cov-report html:tests/reports/cov_html"
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+omit = []
+
+exclude_lines = [
+    "pragma: no cover",
+]
