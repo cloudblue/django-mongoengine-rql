@@ -30,6 +30,12 @@ This library is a Django-Mongoengine specific implementation of RQL filtering.
 $ pip install django-mongoengine-rql
 ```
 
+## Notes
+
+Due to implementation and Mongo engine features there may be some limitations in filtering, for example:
+* `distinct` setting is not supported for filters
+* annotations are not supported, as well
+
 
 ## Development
 
