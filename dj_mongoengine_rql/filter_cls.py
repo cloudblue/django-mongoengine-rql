@@ -4,20 +4,19 @@
 
 from dj_rql.filter_cls import RQLFilterClass
 from django_mongoengine.fields.djangoflavor import DjangoField
-from mongoengine import Q
 from py_rql.constants import FilterLookups
 
 from dj_mongoengine_rql.constants import MongoengineFilterTypes
-
-
-class _Q(Q):
-    def __invert__(self):
-        return self.__class__(__raw__={'$nor': [self.query]})
+from dj_mongoengine_rql.q import Q
 
 
 class MongoengineRQLFilterClass(RQLFilterClass):
-    Q_CLS = _Q
+    Q_CLS = Q
     FILTER_TYPES_CLS = MongoengineFilterTypes
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__class__.Q_CLS.MODEL = self.__class__.MODEL
 
     @classmethod
     def _is_valid_model_cls(cls, model):

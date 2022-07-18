@@ -20,7 +20,7 @@ class Doc(Document):
     d = fields.DateField(blank=True)
     dec = fields.DecimalField(blank=True)
     flt = fields.FloatField(blank=True)
-    int_f = fields.IntField(blank=True)
+    int_f = fields.IntField(blank=True, db_field='other_int_f')
 
     related_doc = fields.EmbeddedDocumentField('EmbDoc', blank=True)
 
@@ -70,3 +70,9 @@ def test_init():
     )
 
     assert list(qs.all()) == []
+
+
+def test_not():
+    _, qs = DocFilterClass(Doc.objects.filter(int_f=1)).apply_filters('not(eq(int_f,120))')
+
+    assert qs.query.q == {'$nor': [{'other_int_f': 120}], 'other_int_f': 1}
