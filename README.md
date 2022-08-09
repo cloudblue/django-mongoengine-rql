@@ -95,6 +95,7 @@ Due to implementation and Mongo engine features there may be some limitations in
 
 Check code style: `poetry run flake8`
 Run tests: `poetry run pytest`
+Run integration tests: `docker compose run app_test`
 
 Tests reports are generated in `tests/reports`.
 * `out.xml` - JUnit test results
