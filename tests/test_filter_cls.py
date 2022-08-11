@@ -2,27 +2,10 @@
 #  Copyright © 2022 CloudBlue LLC. All rights reserved.
 #
 
-from django_mongoengine import Document, EmbeddedDocument, fields
 from py_rql.constants import FilterLookups
 
 from dj_mongoengine_rql.filter_cls import MongoengineRQLFilterClass
-
-
-class EmbDoc(EmbeddedDocument):
-    str_f = fields.StringField()
-    int_f = fields.IntField(blank=True)
-
-
-class Doc(Document):
-    str_f = fields.StringField(max_length=255, blank=True)
-    bl = fields.BooleanField(default=True)
-    dt = fields.DateTimeField(blank=True)
-    d = fields.DateField(blank=True)
-    dec = fields.DecimalField(blank=True)
-    flt = fields.FloatField(blank=True)
-    int_f = fields.IntField(blank=True, db_field='other_int_f')
-
-    related_doc = fields.EmbeddedDocumentField('EmbDoc', blank=True)
+from tests.documents import Doc
 
 
 class DocFilterClass(MongoengineRQLFilterClass):
@@ -76,3 +59,13 @@ def test_not():
     _, qs = DocFilterClass(Doc.objects.filter(int_f=1)).apply_filters('not(eq(int_f,120))')
 
     assert qs.query.q == {'$nor': [{'other_int_f': 120}], 'other_int_f': 1}
+
+
+def test_db_operation(is_real_mongo):
+    if is_real_mongo:
+        doc = Doc.objects.create(str_f='a')
+        Doc.objects.create(str_f='b')
+
+        _, qs = DocFilterClass(Doc.objects).apply_filters('str_f=a')
+
+        assert list(qs.all()) == [doc]
