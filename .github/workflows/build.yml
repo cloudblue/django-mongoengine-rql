@@ -15,6 +15,14 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.8', '3.9', '3.10']
+    services:
+      mongo:
+        image: mongo:5
+        ports:
+          - 27017:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: 1q2w3e
     steps:
       - name: Checkout project
         uses: actions/checkout@v2
@@ -35,6 +43,10 @@ jobs:
       - name: Testing
         run: |
           poetry run pytest
+        env:
+          MONGO_HOST: localhost
+          MONGO_USER: root
+          MONGO_PASSWORD: 1q2w3e
   sonar:
     name: Quality Analysis by sonar
     needs: [build]

@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  mongo:
+    image: mongo:5
+    restart: on-failure
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 1q2w3e
+
+  app_test:
+    container_name: django_mongoengine_rql_test
+    image: django_mongoengine_rql_test
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c 'poetry run flake8 && poetry run pytest'
+    volumes:
+      - ./:/app
+    depends_on:
+      - mongo
+    environment:
+      MONGO_HOST: mongo
+      MONGO_USER: root
+      MONGO_PASSWORD: 1q2w3e
