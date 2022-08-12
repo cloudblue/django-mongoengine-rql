@@ -3,7 +3,7 @@ version: "3"
 services:
   mongo:
     image: mongo:5
-    restart: always
+    restart: on-failure
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 1q2w3e
