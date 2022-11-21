@@ -2,6 +2,7 @@
 #  Copyright © 2022 CloudBlue LLC. All rights reserved.
 #
 
+from dj_rql.constants import DjangoLookups
 from dj_rql.filter_cls import RQLFilterClass
 from django_mongoengine.fields.djangoflavor import DjangoField
 from py_rql.constants import FilterLookups
@@ -39,6 +40,10 @@ class MongoengineRQLFilterClass(RQLFilterClass):
         return field.precision
 
     def _build_django_q(self, filter_item, django_lookup, filter_lookup, typed_value):
+        if django_lookup == DjangoLookups.NULL:
+            q = self.Q_CLS(**{filter_item['orm_route']: None})
+            return ~q if filter_lookup == FilterLookups.NE else q
+
         if filter_lookup != FilterLookups.NE:
             kwargs = {'{0}__{1}'.format(filter_item['orm_route'], django_lookup): typed_value}
         else:
