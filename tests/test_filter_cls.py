@@ -61,6 +61,18 @@ def test_not():
     assert qs.query.q == {'$nor': [{'other_int_f': 120}], 'other_int_f': 1}
 
 
+def test_null():
+    _, qs = DocFilterClass(Doc.objects).apply_filters('flt=null()')
+
+    assert qs.query.q == {'flt': None}
+
+
+def test_not_null():
+    _, qs = DocFilterClass(Doc.objects).apply_filters('flt=ne=null()')
+
+    assert qs.query.q == {'$nor': [{'flt': None}]}
+
+
 def test_db_operation(is_real_mongo):
     if is_real_mongo:
         doc = Doc.objects.create(str_f='a')
