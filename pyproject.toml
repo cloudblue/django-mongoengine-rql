@@ -2,7 +2,7 @@
 name = "django-mongoengine-rql"
 version = "0.1.0"
 description = "Django Mongoengine RQL Filtering"
-authors = ["CloudBlue LLC"]
+authors = ["Ingram Micro"]
 license = "Apache-2.0"
 packages = [
     { include = "dj_mongoengine_rql" }
@@ -15,9 +15,9 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: Unix",
-    "Framework :: Django :: 3.0",
-    "Framework :: Django :: 3.1",
     "Framework :: Django :: 3.2",
+    "Framework :: Django :: 4.1",
+    "Framework :: Django :: 4.2",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -38,9 +38,10 @@ django-rql = "^4.2.0"
 django-mongoengine = "^0.5.4"
 
 [tool.poetry.dev-dependencies]
+mongoengine = "0.26.*"
 mongomock = "^4.1"
-ipython = ">=7.10.0"
-pytest = "^6.1.2"
+ipython = "^7.10.0"
+pytest = "^7.2.0"
 pytest-cov = "^2.10.1"
 pytest-django = "^4.4"
 pytest-mock = "^3.3.1"
