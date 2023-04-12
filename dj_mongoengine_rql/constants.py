@@ -1,5 +1,5 @@
 #
-#  Copyright © 2022 CloudBlue LLC. All rights reserved.
+#  Copyright © 2022 Ingram Micro. All rights reserved.
 #
 
 from dj_rql.constants import FilterTypes
