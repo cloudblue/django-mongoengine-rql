@@ -1,6 +1,8 @@
 #
-#  Copyright © 2022 CloudBlue LLC. All rights reserved.
+#  Copyright © 2023 Ingram Micro. All rights reserved.
 #
+
+from typing import Pattern
 
 from py_rql.constants import FilterLookups
 
@@ -59,6 +61,24 @@ def test_not():
     _, qs = DocFilterClass(Doc.objects.filter(int_f=1)).apply_filters('not(eq(int_f,120))')
 
     assert qs.query.q == {'$nor': [{'other_int_f': 120}], 'other_int_f': 1}
+
+
+def test_eq_str():
+    _, qs = DocFilterClass(Doc.objects).apply_filters('str_f=x')
+
+    assert qs.query.q == {'str_f': 'x'}
+
+
+def test_like_str():
+    _, qs = DocFilterClass(Doc.objects).apply_filters('like(str_f,*x*s*)')
+
+    assert isinstance(qs.query.q['str_f'], Pattern)
+
+
+def test_ne_str():
+    _, qs = DocFilterClass(Doc.objects).apply_filters('str_f=ne=x')
+
+    assert qs.query.q == {'$nor': [{'str_f': 'x'}]}
 
 
 def test_null():

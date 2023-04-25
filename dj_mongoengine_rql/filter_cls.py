@@ -1,5 +1,5 @@
 #
-#  Copyright © 2022 Ingram Micro. All rights reserved.
+#  Copyright © 2023 Ingram Micro. All rights reserved.
 #
 
 from dj_rql.constants import DjangoLookups
@@ -40,8 +40,9 @@ class MongoengineRQLFilterClass(RQLFilterClass):
         return field.precision
 
     def _build_django_q(self, filter_item, django_lookup, filter_lookup, typed_value):
-        if django_lookup == DjangoLookups.NULL:
-            q = self.Q_CLS(**{filter_item['orm_route']: None})
+        if django_lookup in (DjangoLookups.EXACT, DjangoLookups.NULL):
+            v = typed_value if django_lookup == DjangoLookups.EXACT else None
+            q = self.Q_CLS(**{filter_item['orm_route']: v})
             return ~q if filter_lookup == FilterLookups.NE else q
 
         if filter_lookup != FilterLookups.NE:
