@@ -86,7 +86,10 @@ Due to implementation and Mongo engine features there may be some limitations in
 ## Development
 
 1. Python 3.8+
-0. Install dependencies `pip install poetry && poetry install`
+2. Install dependencies `pip install poetry && poetry install`
+3. We use `isort` library to order and format our imports, and `black` - to format the code. 
+   We check it using `flake8-isort` and `flake8-black` libraries (automatically on `flake8` run).  
+   For convenience you may run `docker compose run format` to format the code.
 
 ## Testing
 
