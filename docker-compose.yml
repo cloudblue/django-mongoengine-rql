@@ -10,7 +10,7 @@ services:
 
   app_test:
     container_name: django_mongoengine_rql_test
-    image: django_mongoengine_rql_test
+    image: django_mongoengine_rql
     build:
       context: .
       dockerfile: Dockerfile
@@ -23,3 +23,14 @@ services:
       MONGO_HOST: mongo
       MONGO_USER: root
       MONGO_PASSWORD: 1q2w3e
+
+  format:
+    container_name: django_mongoengine_rql_format
+    image: django_mongoengine_rql
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      bash -c 'poetry run isort . && poetry run black .'
+    volumes:
+      - ./:/app
