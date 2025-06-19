@@ -1,5 +1,5 @@
 #
-#  Copyright © 2023 Ingram Micro. All rights reserved.
+#  Copyright © 2025 CloudBlue. All rights reserved.
 #
 
 from dj_rql.constants import DjangoLookups
