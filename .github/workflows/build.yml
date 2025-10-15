@@ -25,7 +25,7 @@ jobs:
           MONGO_INITDB_ROOT_PASSWORD: 1q2w3e
     steps:
       - name: Checkout project
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Set up Python ${{ matrix.python-version }}
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout project
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Set up Python 3.10
@@ -71,10 +71,9 @@ jobs:
     - name: Fix coverage report for Sonar
       run: |
         sed -i 's/\/home\/runner\/work\/django-mongoengine-rql\/django-mongoengine-rql\//\/github\/workspace\//g' ./tests/reports/coverage.xml
-    - name: SonarCloud
-      uses: SonarSource/sonarcloud-github-action@master
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarqube-scan-action@v6
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     - name: Wait sonar to process report
       uses: jakejarvis/wait-action@master
