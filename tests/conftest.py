@@ -2,6 +2,7 @@
 #  Copyright © 2022 CloudBlue LLC. All rights reserved.
 #
 
+import mongomock
 import pytest
 from mongoengine.connection import register_connection
 
@@ -14,7 +15,7 @@ def _bootstrap_connection():
         conn_settings = dict(conn_settings)
         if not conn_settings.get('host'):
             conn_settings['host'] = 'mongodb://localhost'
-            conn_settings['is_mock'] = True
+            conn_settings['mongo_client_class'] = mongomock.MongoClient
         register_connection(alias, **conn_settings)
 
 
