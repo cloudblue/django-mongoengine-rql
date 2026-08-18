@@ -4,8 +4,8 @@
 
 from dj_rql.constants import DjangoLookups
 from dj_rql.filter_cls import RQLFilterClass
-from django_mongoengine.fields.djangoflavor import DjangoField
-from py_rql.constants import FilterLookups
+from mongoengine.base import BaseField
+from py_rql.constants import FilterLookups, RQL_EMPTY
 
 from dj_mongoengine_rql.constants import MongoengineFilterTypes
 from dj_mongoengine_rql.q import Q
@@ -25,11 +25,11 @@ class MongoengineRQLFilterClass(RQLFilterClass):
 
     @classmethod
     def _is_field_supported(cls, field):
-        return isinstance(field, DjangoField)
+        return isinstance(field, BaseField)
 
     @classmethod
     def _is_field_nullable(cls, field):
-        return field.blank or field.primary_key
+        return (not getattr(field, 'required', True)) or field.primary_key
 
     @classmethod
     def _get_field_related_model(cls, field):
@@ -38,6 +38,21 @@ class MongoengineRQLFilterClass(RQLFilterClass):
     @classmethod
     def _get_decimal_field_precision(cls, field):
         return field.precision
+
+    @classmethod
+    def _get_model_field(cls, model, field_name):
+        return model._fields[field_name]
+
+    @classmethod
+    def _convert_value(cls, django_field, str_value, use_repr=False):
+        if cls.remove_quotes(str_value) == RQL_EMPTY:
+            ft = cls.FILTER_TYPES_CLS
+            filter_type = ft.field_filter_type(django_field)
+            if filter_type in (ft.STRING, ft.INT):
+                if filter_type == ft.INT or getattr(django_field, 'required', True):
+                    raise ValueError
+                return ''
+        return super()._convert_value(django_field, str_value, use_repr=use_repr)
 
     def _build_django_q(self, filter_item, django_lookup, filter_lookup, typed_value):
         if django_lookup in (DjangoLookups.EXACT, DjangoLookups.NULL):
