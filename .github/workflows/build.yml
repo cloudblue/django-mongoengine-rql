@@ -70,7 +70,7 @@ jobs:
         poetry run pytest
     - name: Fix coverage report for Sonar
       run: |
-        sed -i 's/\/home\/runner\/work\/django-mongoengine-rql\/django-mongoengine-rql\//\/github\/workspace\//g' ./tests/reports/coverage.xml
+        sed -i "s|$(pwd)/|${GITHUB_WORKSPACE}/|g" ./tests/reports/coverage.xml
     - name: SonarCloud
       uses: SonarSource/sonarcloud-github-action@master
       env:
