@@ -4,7 +4,10 @@
 
 from typing import Pattern
 
+import pytest
+from dj_rql.fields import SelectField
 from py_rql.constants import FilterLookups
+from py_rql.exceptions import RQLFilterValueError
 
 from dj_mongoengine_rql.filter_cls import MongoengineRQLFilterClass
 from tests.documents import Doc
@@ -60,37 +63,37 @@ def test_init():
 def test_not():
     _, qs = DocFilterClass(Doc.objects.filter(int_f=1)).apply_filters('not(eq(int_f,120))')
 
-    assert qs.query.q == {'$nor': [{'other_int_f': 120}], 'other_int_f': 1}
+    assert qs._query == {'$nor': [{'other_int_f': 120}], 'other_int_f': 1}
 
 
 def test_eq_str():
     _, qs = DocFilterClass(Doc.objects).apply_filters('str_f=x')
 
-    assert qs.query.q == {'str_f': 'x'}
+    assert qs._query == {'str_f': 'x'}
 
 
 def test_like_str():
     _, qs = DocFilterClass(Doc.objects).apply_filters('like(str_f,*x*s*)')
 
-    assert isinstance(qs.query.q['str_f'], Pattern)
+    assert isinstance(qs._query['str_f'], Pattern)
 
 
 def test_ne_str():
     _, qs = DocFilterClass(Doc.objects).apply_filters('str_f=ne=x')
 
-    assert qs.query.q == {'$nor': [{'str_f': 'x'}]}
+    assert qs._query == {'$nor': [{'str_f': 'x'}]}
 
 
 def test_null():
     _, qs = DocFilterClass(Doc.objects).apply_filters('flt=null()')
 
-    assert qs.query.q == {'flt': None}
+    assert qs._query == {'flt': None}
 
 
 def test_not_null():
     _, qs = DocFilterClass(Doc.objects).apply_filters('flt=ne=null()')
 
-    assert qs.query.q == {'$nor': [{'flt': None}]}
+    assert qs._query == {'$nor': [{'flt': None}]}
 
 
 def test_db_operation(is_real_mongo):
@@ -101,3 +104,62 @@ def test_db_operation(is_real_mongo):
         _, qs = DocFilterClass(Doc.objects).apply_filters('str_f=a')
 
         assert list(qs.all()) == [doc]
+
+
+def test_select_field_is_field_supported_does_not_raise():
+    field = SelectField()
+
+    assert MongoengineRQLFilterClass._is_field_supported(field) is False
+
+
+def test_select_field_is_field_nullable_does_not_raise():
+    field = SelectField()
+
+    assert MongoengineRQLFilterClass._is_field_nullable(field) is False
+
+
+def test_empty_str_f():
+    _, qs = DocFilterClass(Doc.objects).apply_filters('str_f=empty()')
+
+    assert qs._query == {'str_f': ''}
+
+
+def test_ne_empty_str_f():
+    _, qs = DocFilterClass(Doc.objects).apply_filters('str_f=ne=empty()')
+
+    assert qs._query == {'$nor': [{'str_f': ''}]}
+
+
+def test_empty_int_f():
+    with pytest.raises(RQLFilterValueError):
+        DocFilterClass(Doc.objects).apply_filters('int_f=empty()')
+
+
+def test_ne_empty_int_f():
+    with pytest.raises(RQLFilterValueError):
+        DocFilterClass(Doc.objects).apply_filters('int_f=ne=empty()')
+
+
+def test_empty_dtf():
+    with pytest.raises(RQLFilterValueError):
+        DocFilterClass(Doc.objects).apply_filters('dtf=empty()')
+
+
+def test_empty_d():
+    with pytest.raises(RQLFilterValueError):
+        DocFilterClass(Doc.objects).apply_filters('d=empty()')
+
+
+def test_empty_dec():
+    with pytest.raises(RQLFilterValueError):
+        DocFilterClass(Doc.objects).apply_filters('dec=empty()')
+
+
+def test_empty_flt():
+    with pytest.raises(RQLFilterValueError):
+        DocFilterClass(Doc.objects).apply_filters('flt=empty()')
+
+
+def test_empty_bl():
+    with pytest.raises(RQLFilterValueError):
+        DocFilterClass(Doc.objects).apply_filters('bl=empty()')
