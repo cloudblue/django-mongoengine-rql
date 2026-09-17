@@ -163,3 +163,13 @@ def test_empty_flt():
 def test_empty_bl():
     with pytest.raises(RQLFilterValueError):
         DocFilterClass(Doc.objects).apply_filters('bl=empty()')
+
+
+def test_datetime_literal_on_date_field():
+    with pytest.raises(RQLFilterValueError):
+        DocFilterClass(Doc.objects).apply_filters('d=eq=2022-01-01T10:02Z')
+
+
+def test_empty_required_related_str_f():
+    with pytest.raises(RQLFilterValueError):
+        DocFilterClass(Doc.objects).apply_filters('related.str_f=empty()')
