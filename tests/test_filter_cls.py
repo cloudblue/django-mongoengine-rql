@@ -6,6 +6,8 @@ from typing import Pattern
 
 import pytest
 from dj_rql.fields import SelectField
+from django.core.exceptions import FieldDoesNotExist
+from django.db import models
 from py_rql.constants import FilterLookups
 from py_rql.exceptions import RQLFilterValueError
 
@@ -173,3 +175,20 @@ def test_datetime_literal_on_date_field():
 def test_empty_required_related_str_f():
     with pytest.raises(RQLFilterValueError):
         DocFilterClass(Doc.objects).apply_filters('related.str_f=empty()')
+
+
+def test_is_blank_plain_django_field():
+    field = models.CharField(blank=True, null=True)
+
+    assert MongoengineRQLFilterClass._is_blank(field) is True
+
+
+def test_is_blank_plain_django_field_not_blank():
+    field = models.CharField(blank=False)
+
+    assert MongoengineRQLFilterClass._is_blank(field) is False
+
+
+def test_get_model_field_unknown_field_name():
+    with pytest.raises(FieldDoesNotExist):
+        DocFilterClass._get_model_field(Doc, 'nonexistent')
