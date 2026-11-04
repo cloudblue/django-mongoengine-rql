@@ -1,6 +1,5 @@
 import os
 
-
 INSTALLED_APPS = []
 
 MONGODB_DATABASES = {
