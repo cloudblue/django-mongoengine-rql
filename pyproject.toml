@@ -2,7 +2,7 @@
 name = "django-mongoengine-rql"
 version = "0.1.0"
 description = "Django Mongoengine RQL Filtering"
-authors = ["Ingram Micro"]
+authors = ["CloudBlue"]
 license = "Apache-2.0"
 packages = [
     { include = "dj_mongoengine_rql" }

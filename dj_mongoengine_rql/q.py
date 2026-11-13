@@ -1,5 +1,5 @@
 #
-#  Copyright © 2022 Ingram Micro. All rights reserved.
+#  Copyright © 2025 CloudBlue. All Rights Reserved.
 #
 
 from mongoengine import Q as ME_Q
