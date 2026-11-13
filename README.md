@@ -13,13 +13,13 @@
 RQL (Resource query language) is designed for modern application development. It is built for the web, ready for NoSQL, and highly extensible with simple syntax.
 This is a query language for fast and convenient database interaction. RQL was designed for use in URLs to request object-style data structures.
 
-This library is a Django-Mongoengine specific implementation of RQL filtering.
+This library is a Mongoengine-specific implementation of RQL filtering.
 
 [RQL Reference](https://connect.cloudblue.com/community/api/rql/)
 
 [Django RQL](https://github.com/cloudblue/django-rql)
 
-[Django Mongoengine](https://github.com/MongoEngine/django-mongoengine)
+[Mongoengine](https://github.com/MongoEngine/mongoengine)
 
 ## Install
 
@@ -85,7 +85,7 @@ Due to implementation and Mongo engine features there may be some limitations in
 
 ## Development
 
-1. Python 3.8+
+1. Python 3.10+
 2. Install dependencies `pip install poetry && poetry install`
 3. We use `isort` library to order and format our imports, and `black` - to format the code. 
    We check it using `flake8-isort` and `flake8-black` libraries (automatically on `flake8` run).  
@@ -93,7 +93,7 @@ Due to implementation and Mongo engine features there may be some limitations in
 
 ## Testing
 
-1. Python 3.8+
+1. Python 3.10+
 0. Install dependencies `pip install poetry && poetry install`
 
 Check code style: `poetry run flake8`
